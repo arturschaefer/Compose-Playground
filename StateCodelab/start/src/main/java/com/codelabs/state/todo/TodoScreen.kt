@@ -37,6 +37,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.codelabs.state.util.generateRandomTodoItem
 import kotlin.random.Random
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 
 /**
  * Stateless component that is responsible for the entire todo screen.
@@ -52,6 +56,9 @@ fun TodoScreen(
     onRemoveItem: (TodoItem) -> Unit
 ) {
     Column {
+        TodoItemInputBackground(elevate = true, modifier = Modifier.fillMaxWidth()) {
+            TodoItemInput(onItemComplete = onAddItem)
+        }
         LazyColumn(
             modifier = Modifier.weight(1f),
             contentPadding = PaddingValues(top = 8.dp)
@@ -110,6 +117,37 @@ private fun randomTint(): Float {
     return Random.nextFloat().coerceIn(0.3f, 0.9f)
 }
 
+@Composable
+fun TodoInputTextField(text: String, onTextChange: (String) -> Unit, modifier: Modifier) {
+    TodoInputText(text, onTextChange, modifier)
+}
+
+@Composable
+fun TodoItemInput(onItemComplete: (TodoItem) -> Unit) {
+    // onItemComplete is an event will fire when an item is completed by the user
+    val (text, setText) = remember { mutableStateOf("") }
+    Column {
+        Row(
+            Modifier
+                .padding(horizontal = 16.dp)
+                .padding(top = 16.dp)
+        ) {
+            TodoInputTextField(
+                text = text,
+                onTextChange = setText,
+                Modifier
+                    .weight(1f)
+                    .padding(end = 8.dp)
+            )
+            TodoEditButton(
+                onClick = { /* todo */ },
+                text = "Add",
+                modifier = Modifier.align(Alignment.CenterVertically)
+            )
+        }
+    }
+}
+
 @Preview
 @Composable
 fun PreviewTodoScreen() {
@@ -128,3 +166,7 @@ fun PreviewTodoRow() {
     val todo = remember { generateRandomTodoItem() }
     TodoRow(todo = todo, onItemClicked = {}, modifier = Modifier.fillMaxWidth())
 }
+
+@Preview
+@Composable
+fun PreviewTodoItemInput() = TodoItemInput(onItemComplete = { })
