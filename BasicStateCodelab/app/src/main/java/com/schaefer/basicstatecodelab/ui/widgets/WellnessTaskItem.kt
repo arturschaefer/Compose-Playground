@@ -22,22 +22,7 @@ import androidx.compose.ui.unit.dp
 @Preview
 @Composable
 fun PreviewWellnessTaskItem() {
-    WellnessTaskItem(taskName = "This is a task")
-}
-
-@Composable
-fun WellnessTaskItem(taskName: String, modifier: Modifier = Modifier) {
-    var checkedState by rememberSaveable { mutableStateOf(false) }
-
-    WellnessTaskItem(
-        taskName = taskName,
-        checked = checkedState,
-        onCheckChange = { newValue ->
-            checkedState = newValue
-        },
-        onClose = { },
-        modifier = modifier
-    )
+    WellnessTaskItem(taskName = "This is a task", false, { }, { })
 }
 
 @Composable
